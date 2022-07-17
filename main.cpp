@@ -3,11 +3,27 @@
 #include <string.h>
 #include <sys/stat.h>
 #include "stdio.h"
+#include "PathTool.hpp"
 
-int main()
+// 获取所有扫描的文件名
+std::vector<std::string> GetAllScanName(const std::string Path)
 {
-    const char *FilePath = "/media/zed/46BCAB97BCAB8053/ScanNet/ScanNet/scans/scene0002_00/scene0002_00_2d-instance.zip";
-    std::string str_RootPath = "/media/zed/46BCAB97BCAB8053/ScanNet/ScanNet/scans/scene0002_00/";
+    std::vector<std::string> AllScansName = tools::PathTool::get_files_in_folder(Path);
+    return AllScansName;
+}
+
+// 解压缩文件到当前路径
+bool unzipFile(const char* FilePath)
+{
+    std::string str_RootPath = tools::PathTool::find_parent_folder(FilePath);
+    std::string FileName = tools::PathTool::find_parent_folder_name(FilePath);
+    char d = '.';
+    std::vector<std::string> n = tools::PathTool::splitLine(FileName, d);
+    str_RootPath = str_RootPath + "/" + n[0] + "/";
+    if(!tools::PathTool::checkfolderexist(str_RootPath)){
+        tools::PathTool::create_folder(str_RootPath);
+    }
+
     printf("File path : %s\n",FilePath);
     int err = 0;
     struct zip_stat File_ZipStruct; 
@@ -26,9 +42,9 @@ int main()
         {
             //printing the file information
             int len = strlen(File_ZipStruct.name);
-            printf("\n Name: [%s], ", File_ZipStruct.name);
-            printf("Size: [%llu], ",(long long unsigned int) File_ZipStruct.size);
-            printf("mtime: [%u] \n", (unsigned int)File_ZipStruct.mtime);
+            // printf("\n Name: [%s], ", File_ZipStruct.name);
+            // printf("Size: [%llu], ",(long long unsigned int) File_ZipStruct.size);
+            // printf("mtime: [%u] \n", (unsigned int)File_ZipStruct.mtime);
 
             if(File_ZipStruct.name[len-1]=='/')
             {
@@ -57,7 +73,29 @@ int main()
     }
     printf("Unzipping Completed .....\n");
     zip_close(z); //closing the file handle
+}
 
+int main(int argc, char **argv){
+    // if (argc<0){
+    //     throw std::runtime_error("please input file path!");
+    // }
+
+    const std::string Scan3RPath = "/home/zed/Project/dataset/3RScan";
+    std::vector<std::string> AllScanName = GetAllScanName(Scan3RPath);
+    for (int i=0; i<AllScanName.size(); ++i){
+        std::string ZipFileName = Scan3RPath + "/" + AllScanName[i] + "/" + "sequence.zip";
+        const char *FilePath = ZipFileName.data();
+        unzipFile(FilePath);
+    }
     return 0;
-   
+
+
+    // const std::string name = "/home/zed/Project/Projects/3DSceneGraph/3RScan/data/3RScan.v2.zip";
+    // char d = '.';
+    // std::vector<std::string> t = tools::PathTool::splitLine(name, d);
+    // for (int i=0; i<t.size(); ++i){
+    //     std::cout << t[i] << std::endl;
+    // }
+
+    // return 0;
 }

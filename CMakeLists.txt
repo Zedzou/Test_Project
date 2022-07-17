@@ -22,5 +22,5 @@ set(WITH_LIBZIP ON)
 include(Uselibzip)
 
 # target and target link
-add_executable(${targetname} main.cpp)
+add_executable(${targetname} main.cpp PathTool.cpp PathTool.hpp)
 include(Linklibzip)
