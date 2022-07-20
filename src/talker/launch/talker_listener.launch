@@ -1,0 +1,5 @@
+<launch>
+    <node name="talker" pkg="talker" type="talker" output="screen"/>
+    <node name="liatener" pkg="talker" type="listener" output="screen"/>
+
+</launch>
