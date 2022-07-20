@@ -1,0 +1,6 @@
+add_subdirectory(LoadSavePointClouds)
+add_subdirectory(ShowPointClouds)
+# add_subdirectory(NormalPointCloud)
+add_subdirectory(removeOutline)
+add_subdirectory(filter_passthough)
+add_subdirectory(InstanceID)

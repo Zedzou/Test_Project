@@ -1,0 +1,15 @@
+FIND_PACKAGE(tinyply QUIET)
+OPTION(WITH_TINYPLY "Build with tinyply" ${TINYPLY_FOUND})
+
+if(NOT tinyply_FOUND)
+        include(ConfigureTimeDependency)
+        add_configure_time_dependency(tinyply)
+        find_package(tinyply REQUIRED)
+ENDIF()
+
+if(NOT TARGET libtinyply)
+    add_library(libtinyply INTERFACE)
+    TARGET_LINK_LIBRARIES(libtinyply INTERFACE ${TINYPLY_LIBRARY})
+    TARGET_INCLUDE_DIRECTORIES(libtinyply INTERFACE ${TINYPLY_INCLUDE_DIR})
+    TARGET_COMPILE_DEFINITIONS(libtinyply INTERFACE COMPILE_WITH_TINYPLY)
+endif()
