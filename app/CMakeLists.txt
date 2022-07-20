@@ -1,0 +1,2 @@
+add_subdirectory(thread_atomic)
+add_subdirectory(thread_mutex)
